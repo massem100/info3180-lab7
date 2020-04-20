@@ -9,6 +9,7 @@ from app import app
 from flask import render_template, request, jsonify
 from app.forms import UploadForm
 from werkzeug.utils import secure_filename
+
 ###
 # Routing for your application.
 ###
@@ -19,16 +20,16 @@ def upload():
 
         description = form.description.data
         photo = form.photo.data
-
         photo_filename = secure_filename(photo.filename)
-        photo.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_filename))
+        file_upload = app.config['UPLOAD_FOLDER']
+        photo.save(os.path.join(file_upload, photo_filename))
 
         data= [{'message': 'File Upload Successful', 'filename': photo_filename, 'description': description}]
-        return jsonify(data)
+        return jsonify(success = data)
     else:
         error_list = form_errors(form)
         error = [{'errors': error_list}]
-        return  jsonify(error)
+        return  jsonify(errors = error)
 
 
 
